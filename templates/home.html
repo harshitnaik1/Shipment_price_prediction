@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shipment Cost Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding-top: 30px;
+        }
+        .container {
+            background: #fff;
+            padding: 25px;
+            width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e6ffe6;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Shipment Cost Prediction</h2>
+    <form id="predictionForm" method="POST">
+        <input type="number" step="any" name="artist" placeholder="Artist Reputation" required>
+        <input type="number" step="any" name="height" placeholder="Height" required>
+        <input type="number" step="any" name="width" placeholder="Width" required>
+        <input type="number" step="any" name="weight" placeholder="Weight" required>
+
+        <select name="material" required>
+            <option value="">Material</option>
+            <option value="Brass">Brass</option>
+            <option value="Clay">Clay</option>
+            <option value="Aluminium">Aluminium</option>
+        </select>
+
+        <input type="number" step="any" name="price" placeholder="Price Of Sculpture" required>
+        <input type="number" step="any" name="base_price" placeholder="Base Shipping Price" required>
+
+        <select name="international" required>
+            <option value="">International</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <select name="express" required>
+            <option value="">Express Shipment</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <select name="install" required>
+            <option value="">Installation Included</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <select name="transport" required>
+            <option value="">Transport Method</option>
+            <option value="Airways">Airways</option>
+            <option value="Roadways">Roadways</option>
+        </select>
+
+        <select name="fragile" required>
+            <option value="">Fragile</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <select name="customer" required>
+            <option value="">Customer Type</option>
+            <option value="Working Class">Working Class</option>
+            <option value="Wealthy">Wealthy</option>
+        </select>
+
+        <select name="remote" required>
+            <option value="">Remote Location</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <input type="number" name="month" placeholder="Month (1-12)" required>
+        <input type="number" name="year" placeholder="Year" required>
+
+        <button type="submit">Predict Cost</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    // Prevent page reload and show result dynamically
+    document.getElementById("predictionForm").onsubmit = async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const response = await fetch("/predict", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+        const cost = result["Predicted Shipment Cost"];
+
+        let resultBox = document.getElementById("result");
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "Predicted Shipment Cost: ₹ " + cost;
+    };
+</script>
+</body>
+</html>
